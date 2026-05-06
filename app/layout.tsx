@@ -1,10 +1,34 @@
 import type { Metadata, Viewport } from 'next'
+import { Space_Grotesk, Sora, Fira_Code } from 'next/font/google'
 import { ThemeProvider } from '@/components/providers/ThemeProvider'
 import { Toaster } from 'react-hot-toast'
 import { ScrollProgress } from '@/components/21st/scroll-progress'
 import { Analytics } from '@vercel/analytics/react'
+import CustomCursor from '@/components/shared/CustomCursor'
 import './globals.css'
 import { siteConfig } from '@/data/config'
+
+// Self-hosted at build time — zero render-blocking network request
+const spaceGrotesk = Space_Grotesk({
+  subsets:  ['latin'],
+  weight:   ['400', '500', '600', '700'],
+  variable: '--font-space-grotesk',
+  display:  'swap',
+})
+
+const sora = Sora({
+  subsets:  ['latin'],
+  weight:   ['300', '400', '500', '600'],
+  variable: '--font-sora',
+  display:  'swap',
+})
+
+const firaCode = Fira_Code({
+  subsets:  ['latin'],
+  weight:   ['300', '400', '500'],
+  variable: '--font-fira-code',
+  display:  'swap',
+})
 
 export const metadata: Metadata = {
   title: { default: `${siteConfig.name} — ${siteConfig.role}`, template: `%s | ${siteConfig.name}` },
@@ -27,9 +51,10 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className={`${spaceGrotesk.variable} ${sora.variable} ${firaCode.variable}`}>
       <body className="min-h-screen bg-background antialiased">
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange={false}>
+          <CustomCursor />
           <ScrollProgress />
           {children}
           <Analytics />

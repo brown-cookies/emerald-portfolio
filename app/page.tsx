@@ -2,7 +2,6 @@ import { NavProvider } from '@/components/providers/NavProvider'
 import { BgProvider }  from '@/components/providers/BgProvider'
 import Navbar          from '@/components/layout/Navbar'
 import Footer          from '@/components/layout/Footer'
-import CustomCursor    from '@/components/shared/CustomCursor'
 import ParticlesBackground from '@/components/shared/ParticlesBackground'
 import SectionTransition   from '@/components/shared/SectionTransition'
 import SectionDots         from '@/components/shared/SectionDots'
@@ -35,7 +34,6 @@ export default function Home() {
     <BgProvider>
       <NavProvider>
         <ParticlesBackground />
-        <CustomCursor />
         <Navbar />
         <SectionDots />
         <SectionCounter />

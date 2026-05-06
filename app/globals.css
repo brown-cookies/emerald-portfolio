@@ -1,8 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=Fira+Code:wght@300;400;500&display=swap');
-
 :root {
-  --font-syne: 'Syne', sans-serif;
-  --font-dm-sans: 'DM Sans', sans-serif;
+  --font-space-grotesk: 'Space Grotesk', sans-serif;
+  --font-sora: 'Sora', sans-serif;
   --font-fira-code: 'Fira Code', monospace;
 }
 
@@ -36,7 +34,7 @@
   }
   * { @apply border-border; box-sizing: border-box; }
   html { -webkit-font-smoothing: antialiased; }
-  body { @apply bg-background text-foreground; font-family: var(--font-dm-sans), sans-serif; cursor: none; }
+  body { @apply bg-background text-foreground; font-family: var(--font-sora), sans-serif; cursor: none; }
   a, button, [role="button"], input, textarea, select { cursor: none; }
   ::-webkit-scrollbar { width: 3px; }
   ::-webkit-scrollbar-track { @apply bg-background; }
@@ -45,8 +43,8 @@
 }
 
 @layer utilities {
-  .font-display  { font-family: var(--font-syne), sans-serif; }
-  .font-body     { font-family: var(--font-dm-sans), sans-serif; }
+  .font-display  { font-family: var(--font-space-grotesk), sans-serif; }
+  .font-body     { font-family: var(--font-sora), sans-serif; }
   .font-mono     { font-family: var(--font-fira-code), monospace; }
 
   .section-padding { @apply py-24 px-4 sm:px-6 lg:px-8; }
@@ -97,3 +95,60 @@ main { animation: page-in 0.4s ease both; }
 
 /* Remove page-in animation — section switcher handles its own transitions */
 main { animation: none; }
+
+/* ─── MDX prose styles ───────────────────────────────────────────────────────
+   Applied to .mdx-content wrapper in MDXContent.tsx
+   rehype-pretty-code outputs <figure data-rehype-pretty-code-figure> wrapping
+   a <pre><code data-language="..."> — we target those here.
+   ──────────────────────────────────────────────────────────────────────────── */
+
+/* Code block figure wrapper */
+.mdx-content figure[data-rehype-pretty-code-figure] {
+  @apply my-6 overflow-hidden rounded-xl border border-border;
+}
+
+/* Title bar (shown when you add a filename: ```ts title="lib/auth.ts") */
+.mdx-content [data-rehype-pretty-code-title] {
+  @apply flex items-center gap-2 border-b border-border bg-muted/60 px-4 py-2.5 text-xs font-mono text-muted-foreground;
+}
+
+/* The <pre> element */
+.mdx-content pre {
+  @apply overflow-x-auto bg-[#1a1b26] p-5 text-sm leading-relaxed;
+  margin: 0 !important;   /* override any Tailwind reset */
+}
+
+/* Line numbers (optional — enable with showLineNumbers in your MDX fence) */
+.mdx-content code[data-line-numbers] {
+  counter-reset: line;
+}
+.mdx-content code[data-line-numbers] > [data-line]::before {
+  counter-increment: line;
+  content: counter(line);
+  @apply mr-4 inline-block w-4 text-right text-muted-foreground/40 select-none;
+}
+
+/* Highlighted lines (use {2,4} syntax in MDX fences) */
+.mdx-content [data-highlighted-line] {
+  @apply bg-emerald-500/10 border-l-2 border-emerald-500;
+  padding-left: calc(1.25rem - 2px); /* compensate for the border */
+}
+
+/* Highlighted word (use "word" syntax) */
+.mdx-content [data-highlighted-chars] {
+  @apply rounded bg-emerald-500/20 px-1 text-emerald-300;
+}
+
+/* Anchor links on headings (from rehype-autolink-headings) */
+.mdx-content .anchor {
+  @apply no-underline text-inherit;
+}
+.mdx-content .anchor:hover::after {
+  content: ' #';
+  @apply text-emerald-500/60;
+}
+
+/* Task list checkboxes (remark-gfm) */
+.mdx-content input[type='checkbox'] {
+  @apply mr-2 rounded accent-emerald-500;
+}

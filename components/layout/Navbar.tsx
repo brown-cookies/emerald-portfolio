@@ -115,6 +115,12 @@ export default function Navbar() {
             >
               <Award className="w-3.5 h-3.5" /> Certs
             </Link>
+            <Link
+              href="/blog"
+              className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium rounded-xl border border-border text-muted-foreground hover:border-emerald-500/40 hover:text-emerald-500 transition-all duration-200"
+            >
+              Blog
+            </Link>
 
             {/* Particles toggle */}
             <BgToggle />

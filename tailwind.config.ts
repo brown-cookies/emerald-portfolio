@@ -12,9 +12,9 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        display: ['var(--font-syne)', ...fontFamily.sans],
-        body: ['var(--font-dm-sans)', ...fontFamily.sans],
-        mono: ['var(--font-fira-code)', ...fontFamily.mono],
+        display: ['var(--font-space-grotesk)', ...fontFamily.sans],
+        body:    ['var(--font-sora)', ...fontFamily.sans],
+        mono:    ['var(--font-fira-code)', ...fontFamily.mono],
       },
       colors: {
         emerald: {
@@ -98,7 +98,7 @@ const config: Config = {
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [require('tailwindcss-animate'), require('@tailwindcss/typography')],
 }
 
 export default config

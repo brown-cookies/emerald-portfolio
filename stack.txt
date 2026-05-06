@@ -1,0 +1,54 @@
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  MIELLE PORTFOLIO — TECH STACK
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+FRAMEWORK & RUNTIME
+  Next.js 15         App Router, server + client components
+  React 19           UI rendering
+  TypeScript 5       Type safety across the entire project
+  Node.js            Runtime (local dev + Vercel serverless)
+
+STYLING & UI
+  Tailwind CSS 3     Utility-first styling
+  Framer Motion 12   Animations and section transitions
+  Radix UI           Accessible UI primitives (Dialog, Tabs, etc.)
+  Aceternity UI      Background beams, spotlight, typewriter, sparkles
+  21st.dev           Glowing cards, animated counter, magnetic button, dock
+  Lucide React       Icon set
+  Syne               Display font
+  DM Sans            Body font
+  Fira Code          Monospace / code font
+
+DATABASE
+  Neon               Serverless PostgreSQL (region: ap-southeast-1 Singapore)
+  Drizzle ORM        Type-safe query builder and schema management
+  drizzle-kit        CLI for schema push and migrations
+
+BLOG / CONTENT
+  next-mdx-remote    MDX rendering for blog post content
+  rehype-pretty-code Syntax highlighting in code blocks
+  rehype-slug        Auto heading IDs
+  rehype-autolink-headings  Anchor links on headings
+  remark-gfm         GitHub Flavored Markdown support
+  Shiki              Code theme engine
+  reading-time       Auto reading time estimate per post
+
+AUTH (ADMIN)
+  jose               JWT signing and verification (HS256)
+  HTTP-only cookie   Session storage (8-hour expiry)
+  crypto             Timing-safe password comparison
+
+EMAIL
+  Resend             Transactional email for contact form submissions
+
+DEPLOYMENT & HOSTING
+  Vercel             Hosting, serverless functions, CDN
+                     Region: sin1 (Singapore)
+
+ENVIRONMENT VARIABLES NEEDED
+  DATABASE_URL       Neon PostgreSQL connection string
+  JWT_SECRET         Secret key for admin JWT signing
+  ADMIN_PASSWORD     Hashed password for admin login
+  RESEND_API_KEY     Resend API key for contact form emails
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
