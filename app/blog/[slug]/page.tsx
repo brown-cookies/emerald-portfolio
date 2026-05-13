@@ -22,32 +22,26 @@ import CopyButton from "@/components/blog/CopyButton";
 import ReadingProgress from "@/components/blog/ReadingProgress";
 import { MessageSquare } from "lucide-react";
 
+// ✅ ISR: regenerate cached page at most every 60 seconds
 export const revalidate = 60;
 
+// ✅ Allow new slugs not present at build time (e.g. new posts from /admin)
+export const dynamicParams = true;
+
 interface Props {
-  params: { slug: string };
-  searchParams?: { preview?: string };
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ preview?: string }>;
 }
 
-/**
- * ❌ REMOVED generateStaticParams()
- * Reason:
- * - It forces full static generation at build time
- * - Causes DYNAMIC_SERVER_USAGE when combined with preview/db logic
- */
-
-/*
 export async function generateStaticParams() {
-  const posts = await getAllPosts()
-  return posts.map(p => ({ slug: p.slug }))
+  const posts = await getAllPosts();
+  return posts.map((p) => ({ slug: p.slug }));
 }
-*/
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const post = await getPostBySlug(params.slug);
-
+  const { slug } = await params;
+  const post = await getPostBySlug(slug);
   if (!post) return {};
-
   return {
     title: `${post.title} · ${siteConfig.name}`,
     description: post.description,
@@ -62,17 +56,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function BlogPostPage({ params, searchParams }: Props) {
-  const { slug } = params;
-
-  const preview = searchParams?.preview;
+  const { slug } = await params;
+  const { preview } = await searchParams;
   const isPreview = preview === "true";
 
   const post = isPreview
     ? await getPostBySlugAdmin(slug)
     : await getPostBySlug(slug);
-
   if (!post) notFound();
 
+  // compileMdx called here so headings can be extracted in the same pass
   const [{ content, headings }, seriesPosts, relatedPosts, approvedComments] =
     await Promise.all([
       compileMdx(post.content),
@@ -81,14 +74,15 @@ export default async function BlogPostPage({ params, searchParams }: Props) {
       getApprovedComments(post.id),
     ]);
 
-  const currentTags = parseTags(post.tags || ""); // ✅ safety fix for null/undefined tags
+  const currentTags = parseTags(post.tags);
 
   return (
+    // Two-column on xl: [prose 672px] [gap 64px] [TOC 224px]
     <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
-      {/* <ReadingProgress /> */}
-
+      {/* Reading progress — fills as user scrolls through the article */}
+      <ReadingProgress />
       <div className="xl:flex xl:gap-16">
-        {/* MAIN COLUMN */}
+        {/* ── Main column ── */}
         <div className="flex-1 min-w-0 max-w-3xl">
           {/* Draft preview banner */}
           {isPreview && !post.published && (
@@ -110,6 +104,7 @@ export default async function BlogPostPage({ params, searchParams }: Props) {
             />
           )}
 
+          {/* CopyButton attaches copy buttons to all code blocks after render */}
           <CopyButton />
           <MDXContent content={content} />
 
@@ -123,7 +118,7 @@ export default async function BlogPostPage({ params, searchParams }: Props) {
 
           <RelatedPosts posts={relatedPosts} currentTags={currentTags} />
 
-          {/* COMMENTS */}
+          {/* Comments */}
           <section className="mt-16 pt-10 border-t border-border">
             <h2 className="flex items-center gap-2 font-display font-bold text-lg text-foreground mb-6">
               <MessageSquare className="w-5 h-5 text-emerald-500" />
@@ -134,13 +129,12 @@ export default async function BlogPostPage({ params, searchParams }: Props) {
                 </span>
               )}
             </h2>
-
             <CommentList comments={approvedComments} />
             <CommentForm postId={post.id} />
           </section>
         </div>
 
-        {/* TOC */}
+        {/* ── TOC sidebar — desktop sticky, mobile floating button ── */}
         <TOC headings={headings} />
       </div>
     </div>
