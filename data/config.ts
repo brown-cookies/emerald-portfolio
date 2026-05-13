@@ -414,16 +414,18 @@ export type Certification = {
   date:           string
   credentialUrl?: string
   badge?:         string
-  category:       'web' | 'ai' | 'security' | 'networking' | 'cloud'
+  category:       'web' | 'ai' | 'security' | 'networking' | 'cloud' | 'literacy'
 }
 
 export const certifications: Certification[] = [
-  { id: 1, title: 'CyberOps Associate',                          issuer: 'Cisco Networking Academy', date: '2024', category: 'security'    },
-  { id: 2, title: 'CCNA: Introduction to Networks',              issuer: 'Cisco Networking Academy', date: '2023', category: 'networking'  },
-  { id: 3, title: 'JavaScript Algorithms and Data Structures',   issuer: 'freeCodeCamp',             date: '2023', category: 'web'         },
-  { id: 4, title: 'Responsive Web Design',                       issuer: 'freeCodeCamp',             date: '2022', category: 'web'         },
-  { id: 5, title: 'AI Essentials',                               issuer: 'Google',                   date: '2024', category: 'ai'          },
-  { id: 6, title: 'Python for Everybody',                        issuer: 'Coursera / U. of Michigan',date: '2023', category: 'ai'          },
+  { id: 1, title: 'IT Essentials: PC Hardware and Software',            issuer: 'Cisco Networking Academy', date: '2024', category: 'literacy',   credentialUrl: '/certificates/it-essentials-pc-hardware-and-software.pdf'  },
+  { id: 2, title: 'CCNA: Switching, Routing, and Wireless Essentials',  issuer: 'Cisco Networking Academy', date: '2025', category: 'networking', credentialUrl: '/certificates/ccna-switching-routing-wireless-essentials.pdf'  },
+  { id: 3, title: 'CCNA: Introduction to Networks',                     issuer: 'Cisco Networking Academy', date: '2024', category: 'networking', credentialUrl: '/certificates/ccna-introduction-to-networks.pdf'  },
+  { id: 4, title: 'Introduction to Packet Tracer',                      issuer: 'Cisco Networking Academy', date: '2024', category: 'networking', credentialUrl: '/certificates/introduction-to-packet-tracer.pdf' },
+  { id: 5, title: 'JavaScript Algorithms and Data Structures',   issuer: 'freeCodeCamp',             date: '2023', category: 'web'         },
+  { id: 6, title: 'Responsive Web Design',                       issuer: 'freeCodeCamp',             date: '2022', category: 'web'         },
+  { id: 7, title: 'AI Essentials',                               issuer: 'Google',                   date: '2024', category: 'ai'          },
+  { id: 8, title: 'Python for Everybody',                        issuer: 'Coursera / U. of Michigan',date: '2023', category: 'ai'          },
 ]
 
 // ─── Testimonials ─────────────────────────────────────────────────────────────
