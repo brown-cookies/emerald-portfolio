@@ -1,1 +1,0 @@
-TODO: Add revalidation for blog post to keep in-sync in blog/ and blog/[slug] instantly when new post is created.

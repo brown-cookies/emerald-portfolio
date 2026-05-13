@@ -1,5 +1,6 @@
 "use client";
 import type { Series } from "@/lib/db/schema";
+import { revalidatePost } from "@/lib/actions/posts";
 import { useState, useCallback, useTransition, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import {
@@ -16,7 +17,6 @@ import {
 } from "lucide-react";
 import { useDebounce } from "@/lib/hooks/useDebounce";
 import type { PostWithSeries } from "@/lib/blog";
-import { revalidatePath } from "next/cache";
 interface Props {
   post?: PostWithSeries;
   allSeries: Series[];
@@ -201,8 +201,7 @@ export default function PostEditor({ post, allSeries }: Props) {
     if (res.ok) {
       if (!silent) {
         // Revalidate Cache for blog/ and /blog/[slug]
-        revalidatePath("/blog"); // bust the listing page
-        revalidatePath("/blog/[slug]", "page"); // bust the new post
+        await revalidatePost(data.post?.slug ?? slug);
         setSuccess(post ? "Post updated." : "Post created.");
       }
       if (!post)
@@ -224,7 +223,11 @@ export default function PostEditor({ post, allSeries }: Props) {
     const res = await fetch(`/api/admin/posts/${post.id}`, {
       method: "DELETE",
     });
-    if (res.ok) startTransition(() => router.push("/admin/posts"));
+    if (res.ok) {
+      // ✅ Bust cache before navigating away
+      await revalidatePost(post.slug);
+      startTransition(() => router.push("/admin/posts"));
+    }
   }
 
   // ── Slug badge ────────────────────────────────────────────────────────────
