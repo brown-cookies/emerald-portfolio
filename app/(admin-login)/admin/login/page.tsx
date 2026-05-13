@@ -1,8 +1,8 @@
-'use client'
-import { useState, FormEvent } from 'react'
-import { useSearchParams } from 'next/navigation'
-import { motion } from 'framer-motion'
-import { Lock, Eye, EyeOff, Loader2 } from 'lucide-react'
+"use client";
+import { useState, FormEvent } from "react";
+import { useSearchParams } from "next/navigation";
+import { motion } from "framer-motion";
+import { Lock, Eye, EyeOff, Loader2 } from "lucide-react";
 
 // NOTE: This page lives in app/(admin-login)/admin/login/ — NOT under
 // app/admin/. Route groups don't affect the URL, so this still serves at
@@ -14,33 +14,33 @@ import { Lock, Eye, EyeOff, Loader2 } from 'lucide-react'
 // The route group breaks the cycle.
 
 export default function AdminLoginPage() {
-  const searchParams = useSearchParams()
-  const from         = searchParams.get('from') ?? '/admin'
+  const searchParams = useSearchParams();
+  const from = searchParams.get("from") ?? "/admin";
 
-  const [password, setPassword] = useState('')
-  const [show, setShow]         = useState(false)
-  const [error, setError]       = useState('')
-  const [loading, setLoading]   = useState(false)
+  const [password, setPassword] = useState("");
+  const [show, setShow] = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e: FormEvent) {
-    e.preventDefault()
-    setLoading(true)
-    setError('')
+    e.preventDefault();
+    setLoading(true);
+    setError("");
 
-    const res = await fetch('/api/auth/login', {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ password }),
-    })
+    const res = await fetch("/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password }),
+    });
 
     if (res.ok) {
       // Hard navigation — forces a real HTTP request so middleware reads
       // the freshly-set cookie instead of hitting a cached redirect.
-      window.location.href = from
+      window.location.href = from;
     } else {
-      const data = await res.json()
-      setError(data.error ?? 'Login failed')
-      setLoading(false)
+      const data = await res.json();
+      setError(data.error ?? "Login failed");
+      setLoading(false);
     }
   }
 
@@ -59,16 +59,20 @@ export default function AdminLoginPage() {
           </div>
         </div>
 
-        <h1 className="text-2xl font-bold text-center text-foreground mb-1">Admin access</h1>
-        <p className="text-sm text-center text-muted-foreground mb-8">Enter your password to continue</p>
+        <h1 className="text-2xl font-bold text-center text-foreground mb-1">
+          Admin access
+        </h1>
+        <p className="text-sm text-center text-muted-foreground mb-8">
+          Enter your password to continue
+        </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Password field */}
           <div className="relative">
             <input
-              type={show ? 'text' : 'password'}
+              type={show ? "text" : "password"}
               value={password}
-              onChange={e => setPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value)}
               placeholder="Password"
               autoFocus
               required
@@ -76,11 +80,15 @@ export default function AdminLoginPage() {
             />
             <button
               type="button"
-              onClick={() => setShow(v => !v)}
+              onClick={() => setShow((v) => !v)}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors p-1"
-              aria-label={show ? 'Hide password' : 'Show password'}
+              aria-label={show ? "Hide password" : "Show password"}
             >
-              {show ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              {show ? (
+                <EyeOff className="w-4 h-4" />
+              ) : (
+                <Eye className="w-4 h-4" />
+              )}
             </button>
           </div>
 
@@ -102,9 +110,11 @@ export default function AdminLoginPage() {
             className="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium transition-all flex items-center justify-center gap-2"
           >
             {loading ? (
-              <><Loader2 className="w-4 h-4 animate-spin" /> Verifying…</>
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" /> Verifying…
+              </>
             ) : (
-              'Sign in'
+              "Sign in"
             )}
           </button>
         </form>
@@ -114,5 +124,5 @@ export default function AdminLoginPage() {
         </p>
       </motion.div>
     </div>
-  )
+  );
 }
