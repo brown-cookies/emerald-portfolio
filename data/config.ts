@@ -8,11 +8,12 @@ export const siteConfig = {
   passionate about crafting scalable web applications and integrating AI into real-world products. 
   I work across the entire stack — from polished React frontends to robust Django/Laravel backends 
   and intelligent AI pipelines. I love turning complex problems into clean, maintainable solutions.`,
-  email: 'mielle.almedejar@gmail.com',
-  github: 'https://github.com/mielle-almedejar',
+  url: 'https:mielle.tech',
+  email: 'jesimielalmedejar1018@gmail.com',
+  github: 'https://github.com/brown-cookies',
   linkedin: 'https://linkedin.com/in/mielle-almedejar',
   location: 'Angeles City, Philippines',
-  resumeUrl: '/resume.pdf',
+  resumeUrl: '/mielle-resume.pdf',
   availableForWork: true,
 }
 
