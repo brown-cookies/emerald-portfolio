@@ -56,10 +56,9 @@ export default function SectionTransition({ sections }: Props) {
   const { current, direction, goTo } = useNav();
   const idx = SECTIONS.indexOf(current);
 
-  const containerRef = useRef<HTMLDivElement>(null); // stable outer div
-  const panelRef = useRef<HTMLDivElement>(null); // scrollable inner panel
+  const containerRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
 
-  // Always-fresh refs so the wheel handler never reads stale closures
   const idxRef = useRef(idx);
   const currentRef = useRef(current);
   idxRef.current = idx;
@@ -71,7 +70,6 @@ export default function SectionTransition({ sections }: Props) {
     (scrollingDown: boolean) => {
       if (cooldown.current) return;
 
-      // For scrollable sections, only navigate when at the scroll boundary
       if (
         SCROLLABLE_SECTIONS.includes(currentRef.current) &&
         panelRef.current
@@ -98,15 +96,14 @@ export default function SectionTransition({ sections }: Props) {
     [goTo],
   );
 
-  // Attach to the OUTER container — it never unmounts, so the listener survives section changes
+  // Desktop: wheel
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
 
     const onWheel = (e: WheelEvent) => {
-      if (Math.abs(e.deltaY) < Math.abs(e.deltaX)) return; // ignore horizontal-dominant
-      if (Math.abs(e.deltaY) < 20) return; // ignore trackpad noise
-
+      if (Math.abs(e.deltaY) < Math.abs(e.deltaX)) return;
+      if (Math.abs(e.deltaY) < 20) return;
       tryNavigate(e.deltaY > 0);
     };
 
@@ -114,32 +111,31 @@ export default function SectionTransition({ sections }: Props) {
     return () => el.removeEventListener("wheel", onWheel);
   }, [tryNavigate]);
 
-  const handleDragEnd = (
-    _: unknown,
-    info: { offset: { y: number }; velocity: { y: number } },
-  ) => {
-    const { offset, velocity } = info;
-    const swipedUp = offset.y < -80 || velocity.y < -500;
-    const swipedDown = offset.y > 80 || velocity.y > 500;
+  // Mobile: touch
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
 
-    if (!swipedUp && !swipedDown) return;
+    let touchStartY = 0;
 
-    if (
-      SCROLLABLE_SECTIONS.includes(current as SectionId) &&
-      panelRef.current
-    ) {
-      const { scrollTop, scrollHeight, clientHeight } = panelRef.current;
-      const atTop = scrollTop <= 2;
-      const atBottom = scrollTop + clientHeight >= scrollHeight - 2;
+    const onTouchStart = (e: TouchEvent) => {
+      touchStartY = e.touches[0].clientY;
+    };
 
-      if (swipedUp && !atBottom) return;
-      if (swipedDown && !atTop) return;
-    }
+    const onTouchEnd = (e: TouchEvent) => {
+      const delta = touchStartY - e.changedTouches[0].clientY;
+      if (Math.abs(delta) < 40) return;
+      tryNavigate(delta > 0);
+    };
 
-    if (swipedUp && idx < SECTIONS.length - 1)
-      goTo(SECTIONS[idx + 1] as SectionId);
-    if (swipedDown && idx > 0) goTo(SECTIONS[idx - 1] as SectionId);
-  };
+    el.addEventListener("touchstart", onTouchStart, { passive: true });
+    el.addEventListener("touchend", onTouchEnd, { passive: true });
+
+    return () => {
+      el.removeEventListener("touchstart", onTouchStart);
+      el.removeEventListener("touchend", onTouchEnd);
+    };
+  }, [tryNavigate]);
 
   return (
     <div
@@ -155,12 +151,8 @@ export default function SectionTransition({ sections }: Props) {
           initial="enter"
           animate="center"
           exit="exit"
-          drag="y"
-          dragConstraints={{ top: 0, bottom: 0 }}
-          dragElastic={0.06}
-          onDragEnd={handleDragEnd}
           className="absolute inset-0 w-full h-full overflow-y-auto overflow-x-hidden"
-          style={{ willChange: "transform, opacity", touchAction: "pan-y" }}
+          style={{ willChange: "transform, opacity" }}
         >
           {sections[current]}
         </motion.div>
