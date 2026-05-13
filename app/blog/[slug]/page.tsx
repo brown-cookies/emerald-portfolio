@@ -80,7 +80,7 @@ export default async function BlogPostPage({ params, searchParams }: Props) {
     // Two-column on xl: [prose 672px] [gap 64px] [TOC 224px]
     <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
       {/* Reading progress — fills as user scrolls through the article */}
-      <ReadingProgress />
+      {/* <ReadingProgress /> */}
       <div className="xl:flex xl:gap-16">
         {/* ── Main column ── */}
         <div className="flex-1 min-w-0 max-w-3xl">
